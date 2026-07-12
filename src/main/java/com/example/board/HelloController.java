@@ -32,9 +32,12 @@ import org.springframework.web.bind.annotation.RestController;
  *  2) GET / 요청 → DispatcherServlet이 @GetMapping("/")을 찾아 호출
  */
 
+// @RestController: 이 클래스를 Spring MVC Controller로 등록 + 반환값을 그대로 HTTP 응답 body로 씀
 @RestController
 public class HelloController {
 
+    // GET http://localhost:8080/ 요청이 오면 이 메서드가 호출됨
+    // (@SpringBootApplication이 같은 패키지를 스캔해서 이 Controller를 자동 등록)
     @GetMapping("/")
     public String hello() {
         return "Hello World!";

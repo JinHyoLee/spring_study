@@ -1,6 +1,9 @@
 package com.example.board; 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,10 +39,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
-    // GET http://localhost:8080/ 요청이 오면 이 메서드가 호출됨
-    // (@SpringBootApplication이 같은 패키지를 스캔해서 이 Controller를 자동 등록)
-    @GetMapping("/")
-    public String hello() {
-        return "Hello World!";
+    @Autowired
+    private JdbcTemplate jdbcTemplate; // 스프링이 자동으로 주입해주는 JDBC 도구
+
+    @GetMapping("/add-user")
+    public String addUser(@RequestParam String name, @RequestParam String email) {
+        // 직접 SQL 쿼리문 작성
+        String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+        
+        // 쿼리 실행
+        jdbcTemplate.update(sql, name, email);
+        
+        return name + " 사용자가 MySQL에 성공적으로 저장되었습니다!";
     }
 }

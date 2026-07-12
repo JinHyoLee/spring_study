@@ -1,5 +1,7 @@
 package com.example.board; 
 
+import java.util.List;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,5 +53,17 @@ public class HelloController {
         jdbcTemplate.update(sql, name, email);
         
         return name + " 사용자가 MySQL에 성공적으로 저장되었습니다!";
+    }
+
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        // 1. 실행할 SQL 쿼리문
+        String sql = "SELECT * FROM users";
+        
+        // 2. 쿼리를 실행하고 결과를 자바 User 객체 리스트로 변환 (Lombok의 Getter/Setter가 여기서 맹활약합니다)
+        List<User> userList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
+        
+        // 3. 브라우저로 리스트 반환 (스프링이 알아서 JSON 배열 형태로 예쁘게 변환해 줍니다)
+        return userList;
     }
 }
